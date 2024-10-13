@@ -1,72 +1,44 @@
 # itsfilmnoir
 
-This project uses Dagger to interact with AWS services, specifically to retrieve the caller identity using the AWS CLI.
+Practice using Dagger with secrets in AWS environment.
 
-## Project Structure
+## Motivation
 
-- `dagger/main.go`: Contains the main Dagger module implementation.
-- `dagger.json`: Dagger configuration file.
-- `justfile`: Contains recipes for common tasks.
+This project serves as a practical exercise for deploying secrets to a container using Dagger and verifying that the AWS CLI can detect and use these secrets.
+
+## Goal
+
+To demonstrate how to securely handle AWS credentials with Dagger, allowing you to run AWS CLI commands in a containerized environment.
 
 ## Prerequisites
 
-- [Dagger](https://dagger.io/)
-- [Go](https://golang.org/)
-- [just](https://github.com/casey/just) command runner
-- AWS CLI credentials configured
+- Dagger
+- just command runner
+- AWS CLI credentials
 
-## Setup
+## Quick Start
 
-1. Ensure you have Dagger, Go, and just installed on your system.
-2. Configure your AWS credentials in `~/.aws/credentials`.
+1. Ensure your AWS credentials are in `~/.aws/credentials` on your docker host.
 
-**Important**: The AWS credentials file (`~/.aws/credentials`) is required for this project to function correctly. Make sure it is properly configured with your AWS access key ID and secret access key before running any commands.
+2. Run the caller identity check:
+   ```
+   just get-caller-identity
+   ```
 
-## Usage
+This command creates an AWS CLI container, mounts your credentials, and runs `aws sts get-caller-identity`.
 
-This project uses `just` as a command runner. Available commands:
+## Available Commands
 
 ```
 just                 # List available recipes
 just format          # Format Go code and justfile
-just get-caller-identity # Execute the GetCallerIdentity function
+just get-caller-identity # Run AWS caller identity check
 ```
 
-### Get Caller Identity
+## Project Structure
 
-To retrieve the AWS caller identity:
+- `dagger/main.go`: Dagger module implementation
+- `dagger.json`: Dagger configuration
+- `justfile`: Command recipes
 
-```
-just get-caller-identity
-```
-
-This command uses Dagger to create an AWS CLI container, mount your AWS credentials, and execute the `aws sts get-caller-identity` command.
-
-Remember: The AWS credentials file must be present and correctly configured for this command to work.
-
-## Dagger Module
-
-The `Itsfilmnoir` struct in `dagger/main.go` defines the following methods:
-
-- `CreateAWSContainer`: Creates a container with the AWS CLI and mounts AWS credentials.
-- `GetCallerIdentity`: Executes the `aws sts get-caller-identity` command in the AWS container.
-- `ExecuteGetCallerIdentity`: Combines the above methods to retrieve the caller identity.
-
-## Development
-
-To format the Go code and justfile:
-
-```
-just format
-```
-
-This command formats the Go code using `gofumpt` and also formats the justfile for consistent styling.
-
-## Configuration
-
-The `dagger.json` file specifies:
-
-- Project name: itsfilmnoir
-- SDK: Go
-
-Ensure your Dagger version is compatible with the project configuration.
+For more details on the implementation, check the comments in `dagger/main.go`.
