@@ -8,4 +8,4 @@ get-caller-identity:
 
 format:
     just --unstable --fmt
-    gofumpt -extra -w .
+    dagger call prettier --source=.
