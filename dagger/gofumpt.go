@@ -6,6 +6,12 @@ import (
 	"dagger/itsfilmnoir/internal/dagger"
 )
 
+func (m *Itsfilmnoir) CreateGofumptContainer() *dagger.Container {
+	return dag.Container().
+		From("homebrew/brew").
+		WithExec([]string{"brew", "install", "gofumpt"})
+}
+
 func (m *Itsfilmnoir) Gofumpt(ctx context.Context, source *dagger.Directory) (*dagger.Directory, error) {
 	gofumptContainer := m.CreateGofumptContainer()
 
