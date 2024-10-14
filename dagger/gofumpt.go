@@ -15,8 +15,11 @@ func (m *Itsfilmnoir) CreateGofumptContainer() *dagger.Container {
 func (m *Itsfilmnoir) Gofumpt(ctx context.Context, source *dagger.Directory) (*dagger.Directory, error) {
 	gofumptContainer := m.CreateGofumptContainer()
 
-	// Copy the source directory into the container
-	containerWithSource := gofumptContainer.WithDirectory("/src", source)
+	// Copy the source directory into the container, excluding .git
+	dirOptions := dagger.ContainerWithDirectoryOpts{
+		Exclude: []string{".git"},
+	}
+	containerWithSource := gofumptContainer.WithDirectory("/src", source, dirOptions)
 
 	output := containerWithSource.
 		WithWorkdir("/src").
