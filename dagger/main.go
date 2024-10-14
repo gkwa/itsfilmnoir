@@ -124,6 +124,9 @@ func (m *Itsfilmnoir) GofumptDebug3(ctx context.Context, source *dagger.Director
 }
 
 
+
+
+
 func (m *Itsfilmnoir) GofumptDebug4(ctx context.Context, source *dagger.Directory) *dagger.Container {
     gofumptContainer := m.CreateGofumptContainer()
 
@@ -132,6 +135,7 @@ func (m *Itsfilmnoir) GofumptDebug4(ctx context.Context, source *dagger.Director
         WithMountedDirectory("/src", source). // Mount source directory
         WithExec([]string{"cp", "-rp", "/src", "/tmp/src"}). // Copy files with permissions preserved
         WithWorkdir("/tmp/src"). // Set working directory to /tmp/src
+        WithExec([]string{"gofumpt","-w","."}). // Test write access in /tmp/src
         WithExec([]string{"touch", "/tmp/src/testfile.txt"}). // Test write access in /tmp/src
         Terminal()
 }
