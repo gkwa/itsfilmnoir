@@ -18,12 +18,12 @@ func (m *Itsfilmnoir) Gofumpt(ctx context.Context, source *dagger.Directory) (*d
 	// Copy the source directory into the container, excluding .git
 	dirOptions := dagger.ContainerWithDirectoryOpts{
 		Exclude: []string{".git"},
+		Owner:   "linuxbrew:linuxbrew",
 	}
 	containerWithSource := gofumptContainer.WithDirectory("/src", source, dirOptions)
 
 	output := containerWithSource.
 		WithWorkdir("/src").
-		WithExec([]string{"sudo", "chmod", "-R", "a+rwx", "."}).
 		WithExec([]string{"gofumpt", "-w", "."}).
 		Directory("/src")
 
