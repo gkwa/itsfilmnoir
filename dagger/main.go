@@ -57,6 +57,20 @@ func (m *Itsfilmnoir) Gofumpt(ctx context.Context, source *dagger.Directory) (*d
 	return output, nil
 }
 
+func (m *Itsfilmnoir) GofumptDebug(ctx context.Context, source *dagger.Directory) *dagger.Container {
+	gofumptContainer := m.CreateGofumptContainer()
+	return gofumptContainer.
+		WithMountedDirectory("/src", source).
+		WithWorkdir("/src").
+		Terminal()
+}
+
+
+
+
+
+
+
 func (m *Itsfilmnoir) CreateAWSContainer(awsConfig *dagger.Secret) *dagger.Container {
 	return dag.Container().
 		From("amazon/aws-cli:latest").
