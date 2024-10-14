@@ -9,3 +9,4 @@ get-caller-identity:
 format:
     just --unstable --fmt
     dagger call prettier --source=. export --path=.
+    dagger call gofumpt --source=. export --path=.
