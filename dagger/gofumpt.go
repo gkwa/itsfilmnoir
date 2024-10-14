@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"dagger/itsfilmnoir/internal/dagger"
 )
@@ -21,9 +22,40 @@ func (m *Itsfilmnoir) Gofumpt(ctx context.Context, source *dagger.Directory) (*d
 	}
 	containerWithSource := gofumptContainer.WithDirectory("/src", source, dirOptions)
 
+	// Execute ls -la before chmod
+	lsOutput1, err := containerWithSource.
+		WithWorkdir("/src").
+		WithExec([]string{"ls", "-la", "dagger/gofumpt.go"}).
+		Stdout(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute ls -la before chmod: %w", err)
+	}
+	fmt.Println("ls -la output before chmod:")
+	fmt.Println(lsOutput1)
+
+	// Execute chmod
+	_, err = containerWithSource.
+		WithWorkdir("/src").
+		WithExec([]string{"chmod", "-R", "+rw", "."}).
+		Sync(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute chmod: %w", err)
+	}
+
+	// Execute ls -la after chmod
+	lsOutput2, err := containerWithSource.
+		WithWorkdir("/src").
+		WithExec([]string{"ls", "-la", "dagger/gofumpt.go"}).
+		Stdout(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute ls -la after chmod: %w", err)
+	}
+	fmt.Println("ls -la output after chmod:")
+	fmt.Println(lsOutput2)
+
+	// Execute gofumpt
 	output := containerWithSource.
 		WithWorkdir("/src").
-		WithExec([]string{"sudo", "chmod", "-R", "a+rwx", "."}).
 		WithExec([]string{"gofumpt", "-w", "."}).
 		Directory("/src")
 
