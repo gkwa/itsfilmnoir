@@ -14,6 +14,7 @@ func (m *Itsfilmnoir) Gofumpt(ctx context.Context, source *dagger.Directory) (*d
 
 	output := containerWithSource.
 		WithWorkdir("/src").
+		WithExec([]string{"sudo", "chmod", "-R", "a+rwx", "."}).
 		WithExec([]string{"gofumpt", "-w", "."}).
 		Directory("/src")
 
