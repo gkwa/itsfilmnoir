@@ -8,7 +8,7 @@ import (
 
 func (m *Itsfilmnoir) CreateGofumptContainer() *dagger.Container {
 	return dag.Container().
-		From("homebrew/brew:latest").
+		From("homebrew/brew:4.4.1").
 		WithExec([]string{"brew", "install", "gofumpt"})
 }
 

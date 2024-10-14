@@ -8,7 +8,7 @@ import (
 
 func (m *Itsfilmnoir) CreateAWSContainer(awsConfig *dagger.Secret) *dagger.Container {
 	return dag.Container().
-		From("amazon/aws-cli:latest").
+		From("amazon/aws-cli:2.18.5").
 		WithMountedSecret("/root/.aws/credentials", awsConfig)
 }
 

@@ -9,7 +9,7 @@ import (
 func (m *Itsfilmnoir) CreatePrettierContainer(ctx context.Context) (*dagger.Container, error) {
 	nodeCache := dag.CacheVolume("node")
 	container := dag.Container().
-		From("node:latest").
+		From("node:lts-alpine3.20").
 		WithMountedCache("/root/.npm", nodeCache).
 		WithExec([]string{"npm", "install", "-g", "prettier"})
 	return container, nil
